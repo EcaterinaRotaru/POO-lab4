@@ -1,0 +1,197 @@
+//Laboratorul 4 Sarcina 1
+
+#include <iostream>
+#include <string>
+
+// Clasa de bază pentru joc
+class Joc {
+protected:
+    std::string numeJoc;
+
+public:
+    // Constructor implicit
+    Joc() : numeJoc("Necunoscut") {
+    }
+
+    // Constructor cu parametri
+    Joc(const std::string& nume) : numeJoc(nume) {
+    }
+
+    // Destructor
+    ~Joc() {
+    }
+
+    void afiseazaDetalii() const {
+        std::cout << "Joc: " << numeJoc << std::endl;
+    }
+};
+
+// Clasa derivată pentru jocul sportiv
+class JocSportiv : public Joc {
+protected:
+    std::string tipSport;
+
+public:
+    // Constructor cu parametri
+    JocSportiv(const std::string& nume, const std::string& tip) : Joc(nume), tipSport(tip) {
+    }
+
+    // Destructor
+    ~JocSportiv() {
+    }
+
+    void afiseazaDetalii() const {
+        std::cout << "Joc Sportiv: " << numeJoc << ", Tip Sport: " << tipSport << std::endl;
+    }
+};
+
+// Clasa derivată pentru volei
+class Volei : public JocSportiv {
+private:
+    int numarJucatori;
+
+public:
+    // Constructor cu parametri
+    Volei(const std::string& nume, const std::string& tip, int nrJucatori)
+        : JocSportiv(nume, tip), numarJucatori(nrJucatori) {
+        std::cout << "Primul constructor\n";
+    }
+
+    // Destructor
+    ~Volei() {
+        std::cout << "Destructor Volei\n";
+    }
+
+    void afiseazaDetalii() const {
+        std::cout << "Volei: " << numeJoc << ", Tip Sport: " << tipSport
+            << ", Numar Jucatori: " << numarJucatori << std::endl;
+    }
+};
+
+int main() {
+    // Exemplu de utilizare
+    Joc* joc = new Volei("Volei Olimpic", "Volei de plaja", 4);
+    (*joc).afiseazaDetalii();
+
+    // Eliberare memorie
+    delete joc;
+
+    return 0;
+}
+
+
+//Laboratorul 4 Sarcina 2
+
+#include <iostream>
+#include <string>
+
+// Clasa pentru Roata
+class Roata {
+private:
+    double raza;
+
+public:
+    // Constructor implicit
+    Roata() : raza(0.0) {}
+
+    // Constructor cu parametri
+    Roata(double r) : raza(r) {}
+
+    // Metoda de acces pentru raza
+    double getRaza() const {
+        return raza;
+    }
+
+    // Metoda de modificare a razei
+    void setRaza(double r) {
+        raza = r;
+    }
+};
+
+// Clasa pentru Automobil
+class Automobil {
+private:
+    Roata roti[4]; // Un automobil are 4 roți
+    std::string firmaProducatoare;
+
+public:
+    // Constructor cu parametri
+    Automobil(const Roata& fataStanga, const Roata& fataDreapta, const Roata& spateStanga, const Roata& spateDreapta, const std::string& firma)
+        : roti{ fataStanga, fataDreapta, spateStanga, spateDreapta }, firmaProducatoare(firma) {}
+
+    // Metode de acces pentru roți
+    const Roata& getRoataFataStanga() const {
+        return roti[0];
+    }
+
+    const Roata& getRoataFataDreapta() const {
+        return roti[1];
+    }
+
+    const Roata& getRoataSpateStanga() const {
+        return roti[2];
+    }
+
+    const Roata& getRoataSpateDreapta() const {
+        return roti[3];
+    }
+
+    // Metoda de acces pentru firma producătoare
+    const std::string& getFirmaProducatoare() const {
+        return firmaProducatoare;
+    }
+};
+
+// Clasa derivată pentru Autocamion
+class Autocamion : public Automobil {
+private:
+    double tonaj;
+
+public:
+    // Constructor cu parametri
+    Autocamion(const Roata& fataStanga, const Roata& fataDreapta, const Roata& spateStanga, const Roata& spateDreapta, const std::string& firma, double t)
+        : Automobil(fataStanga, fataDreapta, spateStanga, spateDreapta, firma), tonaj(t) {}
+
+    // Destructor
+    ~Autocamion() {}
+
+    // Metoda de acces pentru tonaj
+    double getTonaj() const {
+        return tonaj;
+    }
+
+    // Metoda de modificare a tonajului
+    void setTonaj(double t) {
+        tonaj = t;
+    }
+};
+
+int main() {
+    // Exemplu de utilizare
+    Roata roataFataStanga(15.0);
+    Roata roataFataDreapta(15.0);
+    Roata roataSpateStanga(16.0);
+    Roata roataSpateDreapta(16.0);
+
+    Automobil automobil(roataFataStanga, roataFataDreapta, roataSpateStanga, roataSpateDreapta, "Ford");
+
+    std::cout << "Detalii automobil:\n";
+    std::cout << "Firma producatoare: " << automobil.getFirmaProducatoare() << std::endl;
+    std::cout << "Roata fata stanga, raza: " << automobil.getRoataFataStanga().getRaza() << std::endl;
+    std::cout << "Roata fata dreapta, raza: " << automobil.getRoataFataDreapta().getRaza() << std::endl;
+    std::cout << "Roata spate stanga, raza: " << automobil.getRoataSpateStanga().getRaza() << std::endl;
+    std::cout << "Roata spate dreapta, raza: " << automobil.getRoataSpateDreapta().getRaza() << std::endl;
+
+    Autocamion autocamion(roataFataStanga, roataFataDreapta, roataSpateStanga, roataSpateDreapta, "Volvo", 1500.0);
+
+    std::cout << "\nDetalii autocamion:\n";
+    std::cout << "Firma producatoare: " << autocamion.getFirmaProducatoare() << std::endl;
+    std::cout << "Roata fata stanga, raza: " << autocamion.getRoataFataStanga().getRaza() << std::endl;
+    std::cout << "Roata fata dreapta, raza: " << autocamion.getRoataFataDreapta().getRaza() << std::endl;
+    std::cout << "Roata spate stanga, raza: " << autocamion.getRoataSpateStanga().getRaza() << std::endl;
+    std::cout << "Roata spate dreapta, raza: " << autocamion.getRoataSpateDreapta().getRaza() << std::endl;
+    std::cout << "Tonaj: " << autocamion.getTonaj() << " kg\n";
+
+    return 0;
+}
+
